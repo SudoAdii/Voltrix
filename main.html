@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voltrix | Main</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: #f0f0f0;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('./images/bg.webp') no-repeat center top;
+      background-size: 98%;
+      filter: blur(0px);
+      animation: blurIn 1s ease forwards, floatBG 10s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    @keyframes blurIn {
+      0% { filter: blur(2px); }
+      50% { filter: blur(4px); }
+      100% { filter: blur(6px); }
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes floatBG {
+      0%, 100% { background-position: center top -40px; }
+      25% { background-position: center top -30px; }
+      50% { background-position: center top -20px; }
+      75% { background-position: center top -30px; }
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .logo img {
+      height: 84px;
+    }
+
+    .logo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 5px;
+      right: 107px;
+      bottom: 10px;
+      background: linear-gradient(45deg, #b144f4, #8a2be2);
+      filter: blur(40px);
+      z-index: -1;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(145, 70, 255, 0.4);
+    }
+
+    .sol-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, #14f195, #9945ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: transform 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .logo:hover .sol-text {
+      text-shadow: 0 0 10px rgba(153, 69, 255, 0.6);
+      transform: scale(1.1);
+    }
+
+    .main-section {
+      text-align: center;
+      padding-top: 20px;
+      position: relative;
+      z-index: 2;
+      animation: fadeInUp 1.4s ease forwards;
+    }
+
+    .main-section h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+      color: #f0f0f0;
+      animation: fadeInUp 2s ease-in-out forwards;
+    }
+
+    .highlight {
+      background: linear-gradient(70deg, #9146FF, #7B61FF, #6A4EEC, #9F4FFF, #ff5cd1);
+      background-size: 300% 300%;
+      animation: gradientShift 5s ease infinite;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .section-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .section {
+      background: linear-gradient(135deg, #4e4e4e, #2d2d2d);
+      border-radius: 12px;
+      padding: 40px;
+      width: 45%;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 1.5s ease-out forwards;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .section p {
+      font-size: 1.1rem;
+      color: #ccc;
+      line-height: 1.5;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #9146FF;
+      transform: scaleX(0);
+      transform-origin: bottom right;
+      transition: transform 0.4s ease;
+    }
+
+    .section:hover::before {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+
+    .section:hover {
+      box-shadow: 0 0 20px rgba(145, 70, 255, 0.6), 0 0 40px rgba(145, 70, 255, 0.4);
+    }
+
+    /* 🌈 SVG Hover Stroke Effect */
+    .section:hover svg path,
+    .section:hover svg line,
+    .section:hover svg polygon,
+    .section:hover svg circle,
+    .section:hover svg rect {
+      stroke: #9146FF !important;
+      transition: stroke 0.5s ease;
+
+    }
+
+    @keyframes glowing {
+      0% {
+        box-shadow: 0 0 10px rgba(145, 70, 255, 0.4), 0 0 30px rgba(145, 70, 255, 0.3);
+      }
+      100% {
+        box-shadow: 0 0 25px rgba(145, 70, 255, 0.6), 0 0 50px rgba(145, 70, 255, 0.4);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .section {
+        width: 90%;
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="./images/logo.png" alt="SOL Logo" />
+      <span class="sol-text">
+        <img src="./images/voltrix.png" alt="Voltrix Logo" style="height: 1.5rem;" />
+      </span>
+    </div>
+  </header>
+
+  <section class="main-section">
+    <h1>Welcome to <span class="highlight">Voltrix, </span><br />hh!</h1>
+  </section>
+
+  <section class="section-container">
+    <section class="section-container">
+    <div class="section">
+     <svg viewBox="0 0 24 24" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+  <g id="SVGRepo_iconCarrier">
+    <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path>
+    <path d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path>
+  </g>
+</svg><br><br>
+
+      <h2>New Rug</h2>
+      <p>Create a new token deployment</p>
+    </div>
+    <div class="section">
+      <svg viewBox="0 0 24 24" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 14L9.29289 11.7071C9.68342 11.3166 10.3166 11.3166 10.7071 11.7071L12.2929 13.2929C12.6834 13.6834 13.3166 13.6834 13.7071 13.2929L17 10M17 10V12.5M17 10H14.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path> </g></svg><br><br>
+      <h2>Previous Rugs</h2>
+      <p>View your deployment history</p>
+    </div>
+    <div class="section">  <svg viewBox="0 0 24 24" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs><style>.a{fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;}</style></defs><line class="a" x1="2" x2="22" y1="20" y2="20"></line><path class="a" d="M5,20V8.2A.2.2,0,0,1,5.2,8H7.8a.2.2,0,0,1,.2.2V20"></path><path class="a" d="M11,20V4.26667C11,4.11939,11.08954,4,11.2,4h2.6c.11046,0,.2.11939.2.26667V20"></path><path class="a" d="M17,20V11.15c0-.08284.08954-.15.2-.15h2.6c.11046,0,.2.06716.2.15V20"></path></g></svg>
+      <br><br><h2>Statistics</h2>
+      <p>Track your performance</p>
+    </div>
+    <div class="section">
+      <svg viewBox="0 0 24 24" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1395 12.0002C14.1395 13.1048 13.2664 14.0002 12.1895 14.0002C11.1125 14.0002 10.2395 13.1048 10.2395 12.0002C10.2395 10.8957 11.1125 10.0002 12.1895 10.0002C13.2664 10.0002 14.1395 10.8957 14.1395 12.0002Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M7.57381 18.1003L5.12169 12.8133C4.79277 12.2907 4.79277 11.6189 5.12169 11.0963L7.55821 5.89229C7.93118 5.32445 8.55898 4.98876 9.22644 5.00029H12.1895H15.1525C15.8199 4.98876 16.4477 5.32445 16.8207 5.89229L19.2524 11.0923C19.5813 11.6149 19.5813 12.2867 19.2524 12.8093L16.8051 18.1003C16.4324 18.674 15.8002 19.0133 15.1281 19.0003H9.24984C8.5781 19.013 7.94636 18.6737 7.57381 18.1003Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+      <br><br><h2>Settings</h2>
+      <p>Configure your preferences</p>
+    </div>
+  </section>
+  </section>
+</body>
+</html>
