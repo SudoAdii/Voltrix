@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOL Bonus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @keyframes floatBG {
+      0%, 100% {
+        background-position: center top -40px;
+      }
+      25% {
+        background-position: center top -30px;
+      }
+      50% {
+        background-position: center top -20px;
+      }
+      75% {
+        background-position: center top -30px;
+      }
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('./images/bg.webp') no-repeat center top -40px;
+      background-size: cover;
+      animation: floatBG 10s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .logo img {
+      height: 84px;
+    }
+
+    .logo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 5px;
+      right: 107px;
+      bottom: 10px;
+      background: linear-gradient(45deg, #b144f4, #8a2be2);
+      filter: blur(40px);
+      z-index: -1;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(145, 70, 255, 0.4);
+    }
+
+    .sol-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, #14f195, #9945ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: transform 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .logo:hover .sol-text {
+      text-shadow: 0 0 10px rgba(153, 69, 255, 0.6);
+      transform: scale(1.1);
+    }
+
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .social-icons i {
+      font-size: 24px;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .social-icons i:hover {
+      color: #9146FF;
+      text-shadow: 0 0 6px #9146FF;
+      transform: scale(1.2) rotate(15deg);
+    }
+
+    .wallet-button {
+      background: linear-gradient(to right, #9146FF, #7B61FF, #6A4EEC);
+      color: #fff;
+      height: 68px;
+      width: 290px;
+      border: none;
+      border-radius: 100px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      letter-spacing: 1.5px;
+    }
+
+    .wallet-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(145, 70, 255, 0.5);
+    }
+
+    .main-section {
+      text-align: center;
+      padding-top: 100px;
+      position: relative;
+      z-index: 2;
+      animation: fadeInUp 1.4s ease forwards;
+    }
+
+    .main-section h1 {
+      font-size: 4rem;
+      line-height: 1.2;
+      color: #f0f0f0;
+      animation: fadeInUp 2s ease-in-out forwards;
+    }
+
+    .highlight {
+      background: linear-gradient(70deg, #9146FF, #7B61FF, #6A4EEC, #9F4FFF, #ff5cd1);
+      background-size: 300% 300%;
+      animation: gradientShift 5s ease infinite;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .bg-token {
+      position: absolute;
+      z-index: 1;
+      opacity: 0.3;
+      animation: floatToken 3s ease-in-out infinite;
+    }
+
+    .bg-token.token1 {
+      left: 5%;
+      top: 20%;
+      width: 150px;
+    }
+
+    .bg-token.token2 {
+      right: 10%;
+      top: 10%;
+      width: 250px;
+    }
+
+    .bg-token.token3 {
+      left: 35%;
+      top: 60%;
+      width: 100px;
+    }
+
+    @keyframes floatToken {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      50% {
+        transform: translate(20px, -10px) rotate(10deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="./images/logo.png" alt="SOL Logo" />
+      <span class="sol-text">
+        <img src="./images/voltrix.png" alt="Voltrix Logo" style="height: 1.5rem;" />
+      </span>
+    </div>
+    <div class="social-icons">
+      <i class="fab fa-twitter"></i>
+      <i class="fab fa-telegram-plane"></i>
+      <i class="fab fa-youtube"></i>
+      <i class="fab fa-discord"></i>
+    </div>
+    <button class="wallet-button">
+      <svg fill="#ffffff" height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 458.531 458.531" xml:space="preserve" stroke="#ffffff">
+        <g id="SVGRepo_iconCarrier">
+          <path d="M336.688,343.962L336.688,343.962c-21.972-0.001-39.848-17.876-39.848-39.848v-66.176 c0-21.972,17.876-39.847,39.848-39.847h103.83c0.629,0,1.254,0.019,1.876,0.047v-65.922c0-16.969-13.756-30.725-30.725-30.725 H30.726C13.756,101.49,0,115.246,0,132.215v277.621c0,16.969,13.756,30.726,30.726,30.726h380.943 c16.969,0,30.725-13.756,30.725-30.726v-65.922c-0.622,0.029-1.247,0.048-1.876,0.048H336.688z"></path>
+          <path d="M440.518,219.925h-103.83c-9.948,0-18.013,8.065-18.013,18.013v66.176c0,9.948,8.065,18.013,18.013,18.013h103.83 c9.948,0,18.013-8.064,18.013-18.013v-66.176C458.531,227.989,450.466,219.925,440.518,219.925z M372.466,297.024 c-14.359,0-25.999-11.64-25.999-25.999s11.64-25.999,25.999-25.999c14.359,0,25.999,11.64,25.999,25.999 C398.465,285.384,386.825,297.024,372.466,297.024z"></path>
+        </g>
+      </svg>
+      &nbsp;&nbsp;CONNECT WALLET&nbsp;
+    </button>
+  </header>
+
+  <section class="main-section">
+    <h1>WELCOME <span class="highlight">BONUS</span><br />FOR SOLANA USERS</h1>
+  </section>
+
+  <script>
+    const tokens = document.querySelectorAll('.bg-token');
+    tokens.forEach((token, i) => {
+      token.animate([
+        { transform: 'translateY(0px) rotate(0deg)' },
+        { transform: 'translateY(-20px) rotate(5deg)' },
+        { transform: 'translateY(0px) rotate(0deg)' }
+      ], {
+        duration: 4000 + i * 1000,
+        iterations: Infinity,
+        easing: 'ease-in-out'
+      });
+    });
+  </script>
+</body>
+</html>
