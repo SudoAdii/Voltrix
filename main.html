@@ -204,16 +204,26 @@
     }
 
     /* 🌈 SVG Hover Stroke Effect */
-    .section:hover svg path,
-    .section:hover svg line,
-    .section:hover svg polygon,
-    .section:hover svg circle,
-    .section:hover svg rect {
-      stroke: #9146FF !important;
-      fill: #9146FF !important;
-      transition: stroke 0.5s ease;
-      transition: fill 0.5s ease;
-    }
+   .section:hover svg path,
+.section:hover svg line,
+.section:hover svg polygon,
+.section:hover svg circle,
+.section:hover svg rect {
+  stroke: #9146FF !important;
+  transition: stroke 0.5s ease;
+}
+
+/* Applies fill color ONLY when #prev-rug is hovered */
+#prev-rug:hover svg path,
+#prev-rug:hover svg line,
+#prev-rug:hover svg polygon,
+#prev-rug:hover svg circle,
+#prev-rug:hover svg rect {
+  fill: #9146FF !important;
+  stroke: #9146FF !important;
+  transition: fill 0.5s ease;
+}
+
 
     @keyframes glowing {
       0% {
@@ -279,16 +289,27 @@
     .section:hover {
       box-shadow: 0 0 20px rgba(145, 70, 255, 0.6), 0 0 40px rgba(145, 70, 255, 0.4);
     }
-  .section:hover svg path,
-    .section:hover svg line,
-    .section:hover svg polygon,
-    .section:hover svg circle,
-    .section:hover svg rect {
-      stroke: #9146FF !important;
-      fill: #9146FF !important;
-      transition: stroke 0.5s ease;
-      transition: fill 0.5s ease;
-    }
+ /* Applies stroke color change to all .section hovers */
+.section:hover svg path,
+.section:hover svg line,
+.section:hover svg polygon,
+.section:hover svg circle,
+.section:hover svg rect {
+  stroke: #9146FF !important;
+  transition: stroke 0.5s ease;
+}
+
+/* Applies fill color ONLY when #prev-rug is hovered */
+#prev-rug:hover svg path,
+#prev-rug:hover svg line,
+#prev-rug:hover svg polygon,
+#prev-rug:hover svg circle,
+#prev-rug:hover svg rect {
+  fill: #9146FF !important;
+  stroke: #9146FF !important;
+  transition: fill 0.5s ease;
+}
+
 
     @keyframes glowing {
       0% {
