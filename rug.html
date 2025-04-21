@@ -7,8 +7,33 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous"/>
+
+
+  <script type="module">
+  import { Web3Modal } from 'https://unpkg.com/@web3modal/html@3.6.5'
+  import { EthereumClient, w3mConnectors, w3mProvider } from 'https://unpkg.com/@web3modal/ethereum@3.6.5'
+  import { configureChains, createConfig, WagmiConfig } from 'https://unpkg.com/viem@1.27.0/dist/esm/index.js?module'
+  import { mainnet } from 'https://unpkg.com/@wagmi/core/chains?module'
+
+  const projectId = '24cb4618162c124a24e58a917ab7cc45'; // 🔐 Replace with your Web3Modal projectId (free on https://cloud.walletconnect.com)
+
+  const chains = [mainnet];
+  const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors: w3mConnectors({ projectId, chains }),
+    publicClient
+  });
+
+  const ethereumClient = new EthereumClient(wagmiConfig, chains);
+  const modal = new Web3Modal({ projectId }, ethereumClient);
+
+  window.modal = modal; // expose to use later
+</script>
+
 
   <style>
     * {
@@ -353,7 +378,6 @@
   }
 }
 
-
   </style>
 </head>
 <body>
@@ -365,29 +389,59 @@
       </span>
     </div>
   </header><br>
+
   <a href="javascript:history.back()" class="back-button">
-  <i class="fas fa-arrow-left"></i> Back
-</a>
+    <i class="fas fa-arrow-left"></i> Back
+  </a>
 
-<section class="coin-maker-container neon-box">
-  <h1 style="text-align: center;">
-    <span class="highlight"> 🚀 </span>Create a Coin to <span class="highlight">Rug</span>
-  </h1><br>
-  <form class="coin-form">
-    <input type="text" placeholder="Name (e.g. Voltrix)" />
-    <input type="text" placeholder="Ticker (e.g. VTRX)" />
-    <input type="number" placeholder="Token Supply (e.g. 1B)" />
-    <input type="text" placeholder="Description (optional)" />
-    <input type="url" placeholder="Image URL (optional)" />
-    <button type="submit" class="create-button">Create Coin</button>
-  </form>
-</section>
+  <section class="coin-maker-container neon-box">
+    <h1 style="text-align: center;">
+      <span class="highlight">🚀</span> Create a Coin to <span class="highlight">Rug</span>
+    </h1><br>
+    <form class="coin-form" id="coinForm">
+      <input type="text" placeholder="Name (e.g. Voltrix)" required />
+      <input type="text" placeholder="Ticker (e.g. VTRX)" required />
+      <input type="number" placeholder="Token Supply (e.g. 1000000000)" required />
+      <input type="text" placeholder="Description (optional)" />
+      <input type="url" placeholder="Image URL (optional)" />
+ <button id="connectWallet" type="button" class="create-button" style="letter-spacing: 3px;">
+ <b>Create Coin</b>
+</button>
+<p id="walletAddress" style="margin-top: 10px; text-align: center;"></p>
+
+</button>
+
+    </form>
+  </section>
+
+<script type="module">
+  import { getAccount, watchAccount } from 'https://unpkg.com/@wagmi/core?module'
+
+  const connectBtn = document.getElementById('connectWallet');
+  const walletDisplay = document.getElementById('walletAddress');
+
+  connectBtn.addEventListener('click', async () => {
+    window.modal.open();
+  });
+
+  function updateWalletUI(account) {
+    if (account?.address) {
+      walletDisplay.textContent = `Connected: ${account.address}`;
+      connectBtn.textContent = "🔗 Wallet Connected";
+    } else {
+      walletDisplay.textContent = "";
+      connectBtn.textContent = "🔌 Connect Wallet";
+    }
+  }
+
+  const currentAccount = getAccount();
+  updateWalletUI(currentAccount);
+
+  watchAccount((account) => {
+    updateWalletUI(account);
+  });
+</script>
 
 
-  
-
-  <script>
-
-  </script>
 </body>
 </html>
