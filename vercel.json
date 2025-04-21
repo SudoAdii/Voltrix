@@ -1,0 +1,9 @@
+{
+  "builds": [
+    {
+      "src": "index.html",      // Entry point for Vercel to start serving
+      "use": "@vercel/static"   // Vercel static deployment
+    }
+  ],
+  "outputDirectory": "dist"    // Tell Vercel to serve from the dist/ folder
+}
