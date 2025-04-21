@@ -1,5 +1,7 @@
-"scripts": {
-  "dev": "vite",                // Development server
-  "build": "vite build",        // Build the project
-  "preview": "vite preview"     // Preview the built project
+{
+  "scripts": {
+    "dev": "vite",               // Local development server
+    "build": "vite build",       // Build for production
+    "preview": "vite preview"    // Preview the build
+  }
 }
