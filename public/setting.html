@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voltrix | Stats</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: #f0f0f0;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('./images/bg.webp') no-repeat center top;
+      background-size: 98%;
+      filter: blur(0px);
+      animation: blurIn 1s ease forwards, floatBG 10s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    @keyframes blurIn {
+      0% { filter: blur(2px); }
+      50% { filter: blur(4px); }
+      100% { filter: blur(6px); }
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes floatBG {
+      0%, 100% { background-position: center top -40px; }
+      25% { background-position: center top -30px; }
+      50% { background-position: center top -20px; }
+      75% { background-position: center top -30px; }
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .logo img {
+      height: 84px;
+    }
+
+    .logo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 5px;
+      right: 107px;
+      bottom: 10px;
+      background: linear-gradient(45deg, #b144f4, #8a2be2);
+      filter: blur(40px);
+      z-index: -1;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(145, 70, 255, 0.4);
+    }
+
+    .sol-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, #14f195, #9945ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: transform 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .logo:hover .sol-text {
+      text-shadow: 0 0 10px rgba(153, 69, 255, 0.6);
+      transform: scale(1.1);
+    }
+
+    .main-section {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      animation: fadeInUp 1.4s ease forwards;
+    }
+
+    .main-section h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+      color: #f0f0f0;
+      animation: fadeInUp 2s ease-in-out forwards;
+    }
+
+    .highlight {
+      background: linear-gradient(70deg, #9146FF, #7B61FF, #6A4EEC, #9F4FFF, #ff5cd1);
+      background-size: 300% 300%;
+      animation: gradientShift 5s ease infinite;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    
+    .back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  margin-top: 10px;
+  margin-left: 94px;
+  background: linear-gradient(135deg, #1e1e2f, #292943);
+  border: 3px solid rgba(145, 70, 255, 0.4);
+  border-radius: 22px;
+  color: #ffffffcc;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 0 12px rgba(145, 70, 255, 0.2);
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  animation: fadeInUp 1s ease forwards;
+}
+
+.back-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(145, 70, 255, 0.3) 0%, transparent 60%);
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+}
+
+.back-button:hover::before {
+  opacity: 1;
+}
+
+.back-button:hover {
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(145, 70, 255, 0.5);
+  transform: translateY(-2px) scale(1.03);
+  background: linear-gradient(135deg, #2c2c47, #3e3e5c);
+}
+
+.back-button i {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.back-button:hover i {
+  transform: translateX(-4px);
+}
+
+  .coin-maker-container {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 22px;
+    box-shadow: 0 0 40px rgba(153, 69, 255, 0.15);
+    animation: fadeInUp 1.2s ease forwards;
+  }
+
+  .coin-title {
+    font-family: 'Space Grotesk', sans-serif;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #ffffff;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #b144f4, #ff5cd1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .coin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .coin-form input {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    color: #fff;
+    outline: none;
+    transition: box-shadow 0.3s ease, background 0.3s ease;
+  }
+
+  .coin-form input:focus {
+    box-shadow: 0 0 10px #b144f4, 0 0 20px #ff5cd1;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .create-button {
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(90deg, #b144f4, #ff5cd1);
+    box-shadow: 0 0 16px rgba(255, 92, 209, 0.4);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+
+  .create-button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 24px rgba(255, 92, 209, 0.6);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
+@media (max-width: 768px) {
+  .back-button {
+    display: none;
+  }
+      .coin-maker-container {
+      margin: 40px 20px;
+      padding: 24px;
+    }
+    }
+ 
+.neon-box {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(153, 69, 255, 0.4);
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+.neon-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(180, 70, 255, 0.25), transparent 70%);
+  animation: sweep 6s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.neon-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 10px rgba(153, 69, 255, 0.12);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.pnl-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.stat-box {
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 4px solid #9f70ff;
+  padding: 18px 20px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(159, 112, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.stat-box .label {
+  font-size: 0.85rem;
+  color: #aaaaaa;
+  margin-bottom: 6px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-box h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+@keyframes sweep {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: rotate(360deg) scale(1.2);
+    opacity: 0.2;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 40% {
+    box-shadow: 0 0 20px rgba(180, 70, 255, 0.2), 0 0 60px rgba(255, 92, 209, 0.1);
+  }
+  20% {
+    box-shadow: 0 0 30px rgba(180, 70, 255, 0.35), 0 0 80px rgba(255, 92, 209, 0.2);
+  }
+}
+
+/* Flickering glow for form inputs */
+.coin-form input:hover {
+  animation: inputGlow 1.5s infinite alternate;
+}
+
+@keyframes inputGlow {
+  0% {
+    box-shadow: 0 0 2px #b144f4, 0 0 4px #ff5cd1;
+  }
+  100% {
+    box-shadow: 0 0 4px #b144f4, 0 0 8px #ff5cd1;
+  }
+}
+
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  color: #fff;
+  background: rgba(159, 112, 255, 0.05);
+  border: 1px solid rgba(159, 112, 255, 0.4);
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.custom-checkbox:hover {
+  background: rgba(159, 112, 255, 0.1); /* #9f70ff with 10% opacity */
+  border-color: #9f70ff;
+  box-shadow: 0 0 8px #9f70ff;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  accent-color: #9f70ff;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="./images/logo.png" alt="SOL Logo" />
+      <span class="sol-text">
+        <img src="./images/voltrix.png" alt="Voltrix Logo" style="height: 1.5rem;" />
+      </span>
+    </div>
+  </header><br>
+  <a href="javascript:history.back()" class="back-button">
+  <i class="fas fa-arrow-left"></i> Back
+</a>
+
+<section class="coin-maker-container neon-box">
+  <h1 style="text-align: center;">
+   <span class="highlight">🌣 Wallet Settings</span>
+  </h1><br>
+
+<form class="coin-form" onsubmit="handleWalletSubmit(event)">
+  <input type="text" id="walletInput" placeholder="Enter your wallet to recieve funds..." />
+  <button type="submit" class="create-button">      <svg fill="#ffffff" height="23px" width="23px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 458.531 458.531" xml:space="preserve" stroke="#ffffff">
+        <g id="SVGRepo_iconCarrier">
+          <path d="M336.688,343.962L336.688,343.962c-21.972-0.001-39.848-17.876-39.848-39.848v-66.176 c0-21.972,17.876-39.847,39.848-39.847h103.83c0.629,0,1.254,0.019,1.876,0.047v-65.922c0-16.969-13.756-30.725-30.725-30.725 H30.726C13.756,101.49,0,115.246,0,132.215v277.621c0,16.969,13.756,30.726,30.726,30.726h380.943 c16.969,0,30.725-13.756,30.725-30.726v-65.922c-0.622,0.029-1.247,0.048-1.876,0.048H336.688z"></path>
+          <path d="M440.518,219.925h-103.83c-9.948,0-18.013,8.065-18.013,18.013v66.176c0,9.948,8.065,18.013,18.013,18.013h103.83 c9.948,0,18.013-8.064,18.013-18.013v-66.176C458.531,227.989,450.466,219.925,440.518,219.925z M372.466,297.024 c-14.359,0-25.999-11.64-25.999-25.999s11.64-25.999,25.999-25.999c14.359,0,25.999,11.64,25.999,25.999 C398.465,285.384,386.825,297.024,372.466,297.024z"></path>
+        </g>
+      </svg>‎ ‎ <span style="font-size:22px">Connect Wallet</span></button>
+</form>
+
+
+<div style="margin-top: 30px;">
+  <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 12px;">Features</h3>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+<div class="checkbox-container">
+  <label class="custom-checkbox"><input type="checkbox" /> Fake marketcap</label>
+  <label class="custom-checkbox"><input type="checkbox" /> Bundler</label>
+  <label class="custom-checkbox"><input type="checkbox" /> Honeypot</label>
+  <label class="custom-checkbox"><input type="checkbox" /> Auto sell</label>
+</div>
+
+  </div>
+</div>
+
+
+</section>
+
+
+  
+
+  <script>
+
+  </script>
+</body>
+</html>
