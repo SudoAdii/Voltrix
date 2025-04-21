@@ -1,9 +1,10 @@
 {
   "builds": [
     {
-      "src": "index.html",      // Entry point for Vercel to start serving
-      "use": "@vercel/static"   // Vercel static deployment
+      "src": "package.json",     // Entry point for build (or you can specify "vite.config.js")
+      "use": "@vercel/node"      // This will tell Vercel to use a Node.js builder (if using React, Vue, etc.)
     }
   ],
-  "outputDirectory": "dist"    // Tell Vercel to serve from the dist/ folder
+  "outputDirectory": "dist",   // Output the build to the dist directory
+  "cleanUrls": true             // Optionally, clean URLs without `.html` extensions
 }
