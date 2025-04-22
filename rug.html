@@ -505,15 +505,30 @@
   </div>
 </div>
 <script>
-
+<script>
   document.getElementById('connectWallet').addEventListener('click', function (e) {
-  e.preventDefault();
-  document.getElementById('walletPopup').classList.add('show-popup');
-});
+    e.preventDefault();
+    document.getElementById('walletPopup').classList.add('show-popup');
+  });
 
-document.getElementById('closePopup').addEventListener('click', function () {
-  document.getElementById('walletPopup').classList.remove('show-popup');
-});
+  document.getElementById('closePopup').addEventListener('click', function () {
+    document.getElementById('walletPopup').classList.remove('show-popup');
+  });
+
+  // Wait for Web3Modal button to be rendered
+  const observer = new MutationObserver(() => {
+    const w3mButton = document.querySelector('w3m-core-button');
+    if (w3mButton) {
+      w3mButton.addEventListener('click', () => {
+        document.getElementById('walletPopup').classList.remove('show-popup');
+      });
+      observer.disconnect();
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+</script>
+
 </script>
 
 </body>
