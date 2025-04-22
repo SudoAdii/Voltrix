@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous"/>
-  <script type="module" src="/src/main.js"></script>
 
   <style>
     * {
@@ -381,10 +380,11 @@
       <input type="text" placeholder="Description (optional)" />
       <input type="url" placeholder="Image URL (optional)" />
       <button id="connectWallet" type="button" class="create-button" style="letter-spacing: 2px;">
-        <b><w3m-button>Create Coin</w3m-button></b>
+        <b>Create Coin</b>
       </button>
-      <p id="walletAddress" style="margin-top: 10px; text-align: center;"></p>
     </form>
   </section>
+
+<script type="module" src="./walletkit-connect.js"></script>
 </body>
 </html>
