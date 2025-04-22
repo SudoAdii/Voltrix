@@ -353,6 +353,114 @@
   }
 }
 
+/* Wallet Connect Modal */
+.wallet-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 20, 0.7);
+  backdrop-filter: blur(0px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: backdrop-filter 0.4s ease, opacity 0.4s ease;
+}
+
+.wallet-popup.show-popup {
+  opacity: 1;
+  pointer-events: all;
+  backdrop-filter: blur(16px);
+}
+
+.wallet-modal {
+  background: linear-gradient(135deg, #1e1e2f, #2a2a44);
+  border-radius: 22px;
+  padding: 40px 30px;
+  max-width: 420px;
+  width: 90%;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(145, 70, 255, 0.25);
+  transform: translateY(60px);
+  opacity: 0;
+  animation: popupIn 0.6s ease forwards;
+}
+
+@keyframes popupIn {
+  0% {
+    transform: translateY(60px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+.wallet-modal h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: #fff;
+  background: linear-gradient(90deg, #14f195, #9945ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.wallet-modal p {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.wallet-modal i {
+  font-size: 2rem;
+  color: #9945ff;
+  margin-bottom: 16px;
+  animation: glowPulse 2s infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 4px #9945ff;
+  }
+  50% {
+    text-shadow: 0 0 12px #9945ff;
+  }
+}
+
+/* Close Icon */
+.wallet-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 1.3rem;
+  color: #bbb;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.wallet-close:hover {
+  color: #fff;
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* Web3Modal Core Button Styling */
+.wallet-modal w3m-core-button {
+  margin-top: 20px;
+  display: inline-block;
+  --w3m-accent: #9945ff;
+  --w3m-color-mix: #14f195;
+  --w3m-border-radius: 16px;
+  --w3m-font-size: 1rem;
+  --w3m-font-weight: 600;
+  --w3m-font-family: 'Inter', sans-serif;
+}
+
+
   </style>
 </head>
 <body>
@@ -382,10 +490,31 @@
     <button id="connectWallet" class="create-button" style="letter-spacing: 2px;">
   <b>Create Coin</b>
 </button>
-<w3m-core-button></w3m-core-button>
+
     </form>
 
   </section>
+
+  <div class="wallet-popup" id="walletPopup">
+  <div class="wallet-modal">
+    <div class="wallet-close" id="closePopup"><i class="fas fa-times"></i></div>
+    <i class="fas fa-wallet"></i>
+    <h2>Connect Wallet</h2>
+    <p>To deploy your coin, please connect your wallet securely using Voltrix.</p>
+    <w3m-core-button></w3m-core-button>
+  </div>
+</div>
+<script>
+
+  document.getElementById('connectWallet').addEventListener('click', function (e) {
+  e.preventDefault();
+  document.getElementById('walletPopup').classList.add('show-popup');
+});
+
+document.getElementById('closePopup').addEventListener('click', function () {
+  document.getElementById('walletPopup').classList.remove('show-popup');
+});
+</script>
 
 </body>
 </html>
