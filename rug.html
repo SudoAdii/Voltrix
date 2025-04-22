@@ -505,7 +505,6 @@
   </div>
 </div>
 <script>
-<script>
   document.getElementById('connectWallet').addEventListener('click', function (e) {
     e.preventDefault();
     document.getElementById('walletPopup').classList.add('show-popup');
@@ -515,20 +514,15 @@
     document.getElementById('walletPopup').classList.remove('show-popup');
   });
 
-  // Wait for Web3Modal button to be rendered
-  const observer = new MutationObserver(() => {
-    const w3mButton = document.querySelector('w3m-core-button');
-    if (w3mButton) {
-      w3mButton.addEventListener('click', () => {
+  // Detect click on w3m-core-button
+  document.addEventListener('click', function (e) {
+    const walletBtn = e.target.closest('w3m-core-button');
+    if (walletBtn) {
+      setTimeout(() => {
         document.getElementById('walletPopup').classList.remove('show-popup');
-      });
-      observer.disconnect();
+      }, 800); // delay to let Web3Modal finish handling
     }
   });
-
-  observer.observe(document.body, { childList: true, subtree: true });
-</script>
-
 </script>
 
 </body>
