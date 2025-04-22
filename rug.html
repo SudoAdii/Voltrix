@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Voltrix | Main</title>
+  <title>Voltrix | Coin Creation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous"/>
-
+  <script type="module" src="wallet.js"></script>
   <style>
     * {
       margin: 0;
@@ -383,41 +383,8 @@
         <b>Create Coin</b>
       </button>
     </form>
+    <w3m-core-button></w3m-core-button>
   </section>
-  <button id="connectWallet"> connect</button>
-  <script type="module">
-    import { WalletKit } from 'https://cdn.skypack.dev/@reown/walletkit';
 
-    const walletKit = await WalletKit.init({
-      projectId: '24cb4618162c124a24e58a917ab7cc45', // Replace with your project ID
-      metadata: {
-        name: 'Voltrix',
-        description: 'Voltrix Web3 Dapp',
-        url: 'voltrix-stvh-git-main-addys-projects-ea2c57c0.vercel.app',
-        icons: ['images/logo.png']
-      }
-    });
-
-    document.getElementById('connectWallet').addEventListener('click', async () => {
-      try {
-        const session = await walletKit.connect({
-          namespaces: {
-            eip155: {
-              methods: ['eth_sendTransaction', 'personal_sign'],
-              chains: ['eip155:1'],
-              events: ['accountsChanged', 'chainChanged']
-            }
-          }
-        });
-
-        const accounts = session.namespaces.eip155.accounts;
-        const address = accounts[0].split(':')[2];
-        document.getElementById('walletInfo').innerText = `Connected: ${address}`;
-      } catch (err) {
-        console.error('Wallet connection failed:', err);
-        alert('Failed to connect wallet.');
-      }
-    });
-  </script>
 </body>
 </html>
