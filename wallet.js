@@ -16,7 +16,7 @@ import {
   
   // 1. Define chains
   const chains = [bsc];
-  const projectId = "2aca272d18deb10ff748260da5f78bfd";
+  const projectId = "24cb4618162c124a24e58a917ab7cc45";
   
   // 2. Configure wagmi client
   
