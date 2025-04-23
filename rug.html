@@ -501,7 +501,7 @@
     <i class="fas fa-wallet"></i>
     <h2><span class="highlight">Connect Wallet</span></h2>
     <p>To deploy your coin, please connect your wallet securely using Voltrix.</p>
-    <w3m-core-button></w3m-core-button>
+    <w3m-connect></w3m-connect>
   </div>
 </div>
 <script>
@@ -516,7 +516,7 @@
 
   // Detect click on w3m-core-button
   document.addEventListener('click', function (e) {
-    const walletBtn = e.target.closest('w3m-core-button');
+    const walletBtn = e.target.closest('w3m-connect');
     if (walletBtn) {
       setTimeout(() => {
         document.getElementById('walletPopup').classList.remove('show-popup');
