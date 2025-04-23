@@ -1,4 +1,20 @@
+import {
+  w3mConnectors,
+  w3mProvider,
+  WagmiCore,
+  WagmiCoreChains,
+  WagmiCoreConnectors
+} from "https://unpkg.com/@web3modal/ethereum@2.6.2";
+import { Web3Modal } from "https://unpkg.com/@web3modal/html@2.6.2";
 
+// === Setup Ethereum ===
+const {
+  configureChains,
+  createConfig,
+  getAccount,
+  fetchBalance,
+  watchAccount
+} = WagmiCore;
 
 // === Import Solana Modules ===
 import "https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js";
