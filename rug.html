@@ -9,7 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous"/>
-<script type="module" src="./wallet.js"></script>
+  <script src="wallet.js"></script>
+  
   <style>
     * {
       margin: 0;
@@ -501,7 +502,9 @@
     <i class="fas fa-wallet"></i>
     <h2><span class="highlight">Connect Wallet</span></h2>
     <p>To deploy your coin, please connect your wallet securely using Voltrix.</p>
-     <w3m-core-button></w3m-core-button>
+       <button id="connect-button">Connect to Phantom</button>
+  <div id="wallet-address"></div>
+
   </div>
 </div>
 <script>
@@ -514,15 +517,7 @@
     document.getElementById('walletPopup').classList.remove('show-popup');
   });
 
-  // Detect click on w3m-core-button
-  document.addEventListener('click', function (e) {
-    const walletBtn = e.target.closest('w3m-connect');
-    if (walletBtn) {
-      setTimeout(() => {
-        document.getElementById('walletPopup').classList.remove('show-popup');
-      }, 800); // delay to let Web3Modal finish handling
-    }
-  });
+
 </script>
 
 </body>
