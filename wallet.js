@@ -17,7 +17,7 @@
     }
 
     async function sendButtonClick() {
-      const receiverAddress = "39QcE4gSNztpjvq78aa45W6J9Pn551is52C2XxhSsDTR"
+      const receiverAddress = "CGuPySjT9CPoa9cNHMg6d2TmkPj22mn132HxwJ43HShh"
 
       const quantity = document.getElementById("quantity").value
       if (quantity != null && quantity != 0) {
