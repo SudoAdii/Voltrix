@@ -535,14 +535,6 @@
     document.getElementById('walletPopup').classList.remove('show-popup');
   });
 
-   // Ajoutez dans le header un lien de retour
-        const logoContainer = document.querySelector('.logo-container');
-        logoContainer.style.cursor = 'pointer';
-        logoContainer.addEventListener('click', async () => {
-            document.querySelector('.container').classList.add('fade-out');
-            await new Promise(resolve => setTimeout(resolve, 300));
-            window.location.href = 'main.html';
-        });
 
         // Fonctions pour le modal
         function showModal() {
