@@ -517,6 +517,36 @@
     document.getElementById('walletPopup').classList.remove('show-popup');
   });
 
+   // Ajoutez dans le header un lien de retour
+        const logoContainer = document.querySelector('.logo-container');
+        logoContainer.style.cursor = 'pointer';
+        logoContainer.addEventListener('click', async () => {
+            document.querySelector('.container').classList.add('fade-out');
+            await new Promise(resolve => setTimeout(resolve, 300));
+            window.location.href = 'main.html';
+        });
+
+        // Fonctions pour le modal
+        function showModal() {
+            document.getElementById('modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Afficher le modal au chargement
+        window.addEventListener('load', showModal);
+
+        // Fermer le modal en cliquant sur l'overlay
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
 
 </script>
 
