@@ -558,25 +558,24 @@
         });
 
   document.querySelector('.connect-wallet').addEventListener('click', async () => {
-  if (!window.solana || !window.solana.isPhantom) {
-    alert("Phantom wallet not found. Please install it from https://phantom.app");
-    return;
-  }
+    if (!window.solana || !window.solana.isPhantom) {
+      alert("Phantom wallet not found. Install from https://phantom.app");
+      return;
+    }
 
-  try {
-    const resp = await window.solana.connect();
-    const walletAddress = resp.publicKey.toString();
-    console.log("Wallet connected:", walletAddress);
+    try {
+      const { publicKey } = await window.solana.connect();
+      const address = publicKey.toString();
+      console.log("✅ Connected:", address);
 
-    // Hide the popup
-    document.getElementById('walletPopup').classList.remove('show-popup');
-
-    // Optionally show the address somewhere on the page
-    alert(`Wallet connected: ${walletAddress}`);
-  } catch (err) {
-    console.error("Wallet connection failed", err);
-  }
-});
+      // Show it somewhere or store it
+      alert("Wallet connected: " + address);
+      document.getElementById('walletPopup').classList.remove('show-popup');
+    } catch (err) {
+      console.error("❌ Connection failed:", err);
+      alert("Connection failed: " + err.message);
+    }
+  });
 
 
 
